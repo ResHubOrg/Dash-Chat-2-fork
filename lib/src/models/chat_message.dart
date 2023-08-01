@@ -5,6 +5,7 @@ class ChatMessage {
   ChatMessage({
     required this.user,
     required this.createdAt,
+    this.id = '',
     this.text = '',
     this.medias,
     this.quickReplies,
@@ -15,8 +16,12 @@ class ChatMessage {
   });
 
   /// Create a ChatMessage instance from json data
-  factory ChatMessage.fromJson(Map<String, dynamic> jsonData) {
+  factory ChatMessage.fromJson({
+    required Map<String, dynamic> jsonData,
+    String id = '',
+  }) {
     return ChatMessage(
+      id: id,
       user: ChatUser.fromJson(jsonData['user'] as Map<String, dynamic>),
       createdAt: DateTime.parse(jsonData['createdAt'].toString()).toLocal(),
       text: jsonData['text']?.toString() ?? '',
@@ -41,10 +46,14 @@ class ChatMessage {
           : <Mention>[],
       status: MessageStatus.parse(jsonData['status'].toString()),
       replyTo: jsonData['replyTo'] != null
-          ? ChatMessage.fromJson(jsonData['replyTo'] as Map<String, dynamic>)
+          ? ChatMessage.fromJson(
+              jsonData: jsonData['replyTo'] as Map<String, dynamic>)
           : null,
     );
   }
+
+  /// Id of message from firebase
+  String id;
 
   /// Text of the message (optional because you can also just send a media)
   String text;
@@ -78,6 +87,7 @@ class ChatMessage {
   /// Convert a ChatMessage into a json
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
+      'id': id,
       'user': user.toJson(),
       'createdAt': createdAt.toUtc().toIso8601String(),
       'text': text,
