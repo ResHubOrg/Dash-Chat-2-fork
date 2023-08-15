@@ -7,7 +7,7 @@ class ChatMessage {
     required this.createdAt,
     this.id = '',
     this.text = '',
-    this.medias,
+    this.medias = const <ChatMedia>[],
     this.quickReplies,
     this.customProperties,
     this.mentions,
