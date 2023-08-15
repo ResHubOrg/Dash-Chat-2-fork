@@ -5,7 +5,7 @@ class ChatMessage {
   ChatMessage({
     required this.user,
     required this.createdAt,
-    this.id = '',
+    String? id,
     this.text = '',
     this.medias = const <ChatMedia>[],
     this.quickReplies,
@@ -13,15 +13,16 @@ class ChatMessage {
     this.mentions,
     this.status = MessageStatus.none,
     this.replyTo,
-  });
+  }) {
+    this.id = id ?? const Uuid().v4().toString();
+  }
 
   /// Create a ChatMessage instance from json data
   factory ChatMessage.fromJson({
     required Map<String, dynamic> jsonData,
-    String id = '',
   }) {
     return ChatMessage(
-      id: id,
+      id: jsonData['id'].toString(),
       user: ChatUser.fromJson(jsonData['user'] as Map<String, dynamic>),
       createdAt: DateTime.parse(jsonData['createdAt'].toString()).toLocal(),
       text: jsonData['text']?.toString() ?? '',
@@ -53,7 +54,7 @@ class ChatMessage {
   }
 
   /// Id of message from firebase
-  String id;
+  String? id;
 
   /// Text of the message (optional because you can also just send a media)
   String text;
