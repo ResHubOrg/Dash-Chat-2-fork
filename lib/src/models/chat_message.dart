@@ -8,6 +8,7 @@ class ChatMessage {
     String? id,
     this.text = '',
     this.medias = const <ChatMedia>[],
+    this.read,
     this.quickReplies,
     this.customProperties,
     this.mentions,
@@ -66,7 +67,7 @@ class ChatMessage {
         profileImage: jsonData['senderPhotoUrl']?.toString() ?? '',
       ),
       createdAt: DateTime.fromMillisecondsSinceEpoch(
-              (jsonData['createdAt'] as Timestamp).millisecondsSinceEpoch),
+          (jsonData['createdAt'] as Timestamp).millisecondsSinceEpoch),
       text: jsonData['text']?.toString() ?? '',
       medias: jsonData['medias'] != null
           ? (jsonData['medias'] as List<dynamic>)
@@ -74,6 +75,7 @@ class ChatMessage {
                   ChatMedia.fromJson(media as Map<String, dynamic>))
               .toList()
           : <ChatMedia>[],
+      read: jsonData['read'] != null ? jsonData['read'] as bool? : false,
       quickReplies: jsonData['quickReplies'] != null
           ? (jsonData['quickReplies'] as List<dynamic>)
               .map((dynamic quickReply) =>
@@ -103,6 +105,8 @@ class ChatMessage {
 
   /// List of medias of the message
   List<ChatMedia>? medias;
+
+  bool? read;
 
   /// A list of quick replies that users can use to reply to this message
   List<QuickReply>? quickReplies;
