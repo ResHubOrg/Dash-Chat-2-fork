@@ -65,7 +65,8 @@ class ChatMessage {
         firstName: jsonData['senderName']?.toString() ?? '',
         profileImage: jsonData['senderPhotoUrl']?.toString() ?? '',
       ),
-      createdAt: DateTime.parse(jsonData['createdAt'].toString()).toLocal(),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(
+              (jsonData['createdAt'] as Timestamp).millisecondsSinceEpoch),
       text: jsonData['text']?.toString() ?? '',
       medias: jsonData['medias'] != null
           ? (jsonData['medias'] as List<dynamic>)
@@ -144,7 +145,7 @@ class ChatMessage {
   /// Convert a ChatMessage into a comment json
   Map<String, dynamic> toCommentJson() {
     return <String, dynamic>{
-      'createdAt': createdAt.toUtc().toIso8601String(),
+      'createdAt': Timestamp.fromDate(createdAt.toUtc()),
       'text': text,
     };
   }
