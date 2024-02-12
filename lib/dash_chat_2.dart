@@ -11,6 +11,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart' as vp;
 
+import 'src/extensions/map_extensions.dart';
+import 'src/models/like.dart';
 import 'src/widgets/image_provider/image_provider.dart';
 
 export 'package:flutter_parsed_text/flutter_parsed_text.dart';

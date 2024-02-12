@@ -11,6 +11,7 @@ class ChatMessage {
     this.read,
     this.quickReplies,
     this.customProperties,
+    this.likes = const <Like>[],
     this.mentions,
     this.status = MessageStatus.none,
     this.replyTo,
@@ -21,11 +22,18 @@ class ChatMessage {
   /// Create a ChatMessage instance from chat message json data
   factory ChatMessage.fromMessageJson({
     required Map<String, dynamic> jsonData,
+    required String id,
   }) {
     return ChatMessage(
-      id: jsonData['id'].toString(),
+      id: id,
       user: ChatUser.fromJson(jsonData['user'] as Map<String, dynamic>),
       createdAt: DateTime.parse(jsonData['createdAt'].toString()).toLocal(),
+      likes: jsonData
+          .getValueOrDefault<List>('likes', [])
+          .map(
+            (x) => Like.fromMap(x as Map<String, dynamic>),
+          )
+          .toList(),
       text: jsonData['text']?.toString() ?? '',
       medias: jsonData['medias'] != null
           ? (jsonData['medias'] as List<dynamic>)
@@ -33,6 +41,7 @@ class ChatMessage {
                   ChatMedia.fromJson(media as Map<String, dynamic>))
               .toList()
           : <ChatMedia>[],
+      read: jsonData['read'] != null ? jsonData['read'] as bool? : false,
       quickReplies: jsonData['quickReplies'] != null
           ? (jsonData['quickReplies'] as List<dynamic>)
               .map((dynamic quickReply) =>
@@ -49,7 +58,7 @@ class ChatMessage {
       status: MessageStatus.parse(jsonData['status'].toString()),
       replyTo: jsonData['replyTo'] != null
           ? ChatMessage.fromMessageJson(
-              jsonData: jsonData['replyTo'] as Map<String, dynamic>)
+              id: id, jsonData: jsonData['replyTo'] as Map<String, dynamic>)
           : null,
     );
   }
@@ -68,6 +77,12 @@ class ChatMessage {
       ),
       createdAt: DateTime.fromMillisecondsSinceEpoch(
           (jsonData['createdAt'] as Timestamp).millisecondsSinceEpoch),
+      likes: jsonData
+          .getValueOrDefault<List>('likes', [])
+          .map(
+            (x) => Like.fromMap(x as Map<String, dynamic>),
+          )
+          .toList(),
       text: jsonData['text']?.toString() ?? '',
       medias: jsonData['medias'] != null
           ? (jsonData['medias'] as List<dynamic>)
@@ -94,7 +109,7 @@ class ChatMessage {
     );
   }
 
-  /// Id of message from firebase
+  /// id of message
   String? id;
 
   /// Text of the message (optional because you can also just send a media)
@@ -106,6 +121,7 @@ class ChatMessage {
   /// List of medias of the message
   List<ChatMedia>? medias;
 
+  /// is message was seen or unseen
   bool? read;
 
   /// A list of quick replies that users can use to reply to this message
@@ -118,6 +134,9 @@ class ChatMessage {
 
   /// Date of the message
   DateTime createdAt;
+
+  /// likes
+  List<Like> likes;
 
   /// Mentionned elements in the message
   List<Mention>? mentions;
@@ -134,6 +153,7 @@ class ChatMessage {
       'id': id,
       'user': user.toJson(),
       'createdAt': createdAt.toUtc().toIso8601String(),
+      'likes': likes.map((Like like) => like.toMap()).toList(),
       'text': text,
       'medias': medias?.map((ChatMedia media) => media.toJson()).toList(),
       'quickReplies': quickReplies
