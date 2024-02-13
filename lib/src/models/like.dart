@@ -4,10 +4,10 @@ import '../extensions/map_extensions.dart';
 
 class Like {
   Like({
-    this.userId = '',
+    required this.userId,
     this.userType,
     this.userName,
-    this.date,
+    required this.date,
   });
 
   factory Like.fromMap(Map<String, dynamic> json) {
@@ -15,9 +15,7 @@ class Like {
       userId: json.getValueOrDefault<String>('userId', ''),
       userType: json.getValueOrDefault<String>('userType', ''),
       userName: json.getValueOrDefault<String>('userName', ''),
-      date: dateTimeFromTimeStamp(
-        time: json.getValueOrNull<Timestamp>('date'),
-      ),
+      date: json.getValueOrNull<Timestamp>('date'),
     );
   }
 
@@ -33,12 +31,5 @@ class Like {
   String userId;
   String? userType;
   String? userName;
-  DateTime? date;
-}
-
-DateTime? dateTimeFromTimeStamp({Timestamp? time}) {
-  if (time == null) {
-    return null;
-  }
-  return DateTime.fromMicrosecondsSinceEpoch(time.microsecondsSinceEpoch);
+  Timestamp? date;
 }
