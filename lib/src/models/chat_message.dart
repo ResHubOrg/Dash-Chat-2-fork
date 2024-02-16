@@ -9,9 +9,16 @@ class ChatMessage {
     this.text = '',
     this.medias = const <ChatMedia>[],
     this.read,
+    this.channel,
+    this.facilityId,
+    this.residentId,
+    this.friendId,
+    this.familyHubUserId,
+    this.from,
+    this.to,
+    this.likes = const <Like>[],
     this.quickReplies,
     this.customProperties,
-    this.likes = const <Like>[],
     this.mentions,
     this.status = MessageStatus.none,
     this.replyTo,
@@ -42,6 +49,14 @@ class ChatMessage {
               .toList()
           : <ChatMedia>[],
       read: jsonData['read'] != null ? jsonData['read'] as bool? : false,
+      channel: jsonData.getValueOrDefault<String>('channel', ''),
+      facilityId: jsonData.getValueOrDefault<String>('facilityId', ''),
+      residentId: jsonData.getValueOrDefault<String>('residentId', ''),
+      friendId: jsonData.getValueOrDefault<String>('friendId', ''),
+      familyHubUserId:
+          jsonData.getValueOrDefault<String>('familyHubUserId', ''),
+      from: jsonData.getValueOrDefault<String>('from', ''),
+      to: jsonData.getValueOrDefault<String>('to', ''),
       quickReplies: jsonData['quickReplies'] != null
           ? (jsonData['quickReplies'] as List<dynamic>)
               .map((dynamic quickReply) =>
@@ -109,6 +124,15 @@ class ChatMessage {
     );
   }
 
+  /// some custom fields for 'chat' feature
+  String? channel;
+  String? facilityId;
+  String? residentId;
+  String? friendId;
+  String? familyHubUserId;
+  String? from;
+  String? to;
+
   /// id of message
   String? id;
 
@@ -153,8 +177,16 @@ class ChatMessage {
       'id': id,
       'user': user.toJson(),
       'createdAt': createdAt.toUtc().toIso8601String(),
-      'likes': likes.map((Like like) => like.toMap()).toList(),
       'text': text,
+      'read': read,
+      'channel': channel,
+      'facilityId': facilityId,
+      'residentId': residentId,
+      'friendId': friendId,
+      'familyHubUserId': familyHubUserId,
+      'from': from,
+      'to': to,
+      'likes': likes.map((Like like) => like.toMap()).toList(),
       'medias': medias?.map((ChatMedia media) => media.toJson()).toList(),
       'quickReplies': quickReplies
           ?.map((QuickReply quickReply) => quickReply.toJson())
@@ -171,6 +203,7 @@ class ChatMessage {
     return <String, dynamic>{
       'createdAt': Timestamp.fromDate(createdAt.toUtc()),
       'text': text,
+      'read': read,
     };
   }
 }
