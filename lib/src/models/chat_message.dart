@@ -16,6 +16,7 @@ class ChatMessage {
     this.familyHubUserId,
     this.from,
     this.to,
+    this.sharedByResident,
     this.likes = const <Like>[],
     this.quickReplies,
     this.customProperties,
@@ -57,6 +58,7 @@ class ChatMessage {
           jsonData.getValueOrDefault<String>('familyHubUserId', ''),
       from: jsonData.getValueOrDefault<String>('from', ''),
       to: jsonData.getValueOrDefault<String>('to', ''),
+      sharedByResident: jsonData.getValueOrDefault<bool>('sharedByResident', false),
       quickReplies: jsonData['quickReplies'] != null
           ? (jsonData['quickReplies'] as List<dynamic>)
               .map((dynamic quickReply) =>
@@ -133,6 +135,9 @@ class ChatMessage {
   String? from;
   String? to;
 
+  /// This field is used when resident share media without duplicating in gallery
+  bool? sharedByResident;
+
   /// id of message
   String? id;
 
@@ -186,6 +191,7 @@ class ChatMessage {
       'familyHubUserId': familyHubUserId,
       'from': from,
       'to': to,
+      'sharedByResident': sharedByResident,
       'likes': likes.map((Like like) => like.toMap()).toList(),
       'medias': medias?.map((ChatMedia media) => media.toJson()).toList(),
       'quickReplies': quickReplies
