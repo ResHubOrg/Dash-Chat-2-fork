@@ -11,6 +11,7 @@ class ChatMessage {
     this.read,
     this.channel,
     this.facilityId,
+    this.orgId,
     this.residentId,
     this.friendId,
     this.familyHubUserId,
@@ -52,13 +53,15 @@ class ChatMessage {
       read: jsonData['read'] != null ? jsonData['read'] as bool? : false,
       channel: jsonData.getValueOrDefault<String>('channel', ''),
       facilityId: jsonData.getValueOrDefault<String>('facilityId', ''),
+      orgId: jsonData.getValueOrDefault<String>('orgId', ''),
       residentId: jsonData.getValueOrDefault<String>('residentId', ''),
       friendId: jsonData.getValueOrDefault<String>('friendId', ''),
       familyHubUserId:
           jsonData.getValueOrDefault<String>('familyHubUserId', ''),
       from: jsonData.getValueOrDefault<String>('from', ''),
       to: jsonData.getValueOrDefault<String>('to', ''),
-      sharedByResident: jsonData.getValueOrDefault<bool>('sharedByResident', false),
+      sharedByResident:
+          jsonData.getValueOrDefault<bool>('sharedByResident', false),
       quickReplies: jsonData['quickReplies'] != null
           ? (jsonData['quickReplies'] as List<dynamic>)
               .map((dynamic quickReply) =>
@@ -129,6 +132,7 @@ class ChatMessage {
   /// some custom fields for 'chat' feature
   String? channel;
   String? facilityId;
+  String? orgId;
   String? residentId;
   String? friendId;
   String? familyHubUserId;
@@ -186,6 +190,7 @@ class ChatMessage {
       'read': read,
       'channel': channel,
       'facilityId': facilityId,
+      'orgId': orgId,
       'residentId': residentId,
       'friendId': friendId,
       'familyHubUserId': familyHubUserId,
