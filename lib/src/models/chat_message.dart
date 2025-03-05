@@ -14,6 +14,7 @@ class ChatMessage {
     this.orgId,
     this.residentId,
     this.friendId,
+    this.staffId,
     this.familyHubUserId,
     this.from,
     this.to,
@@ -52,6 +53,7 @@ class ChatMessage {
           : <ChatMedia>[],
       read: jsonData['read'] != null ? jsonData['read'] as bool? : false,
       channel: jsonData.getValueOrDefault<String>('channel', ''),
+      staffId: jsonData.getValueOrDefault<String>('staffId', ''),
       facilityId: jsonData.getValueOrDefault<String>('facilityId', ''),
       orgId: jsonData.getValueOrDefault<String>('orgId', ''),
       residentId: jsonData.getValueOrDefault<String>('residentId', ''),
@@ -138,6 +140,7 @@ class ChatMessage {
   String? familyHubUserId;
   String? from;
   String? to;
+  String? staffId;
 
   /// This field is used when resident share media without duplicating in gallery
   bool? sharedByResident;
@@ -196,6 +199,7 @@ class ChatMessage {
       'familyHubUserId': familyHubUserId,
       'from': from,
       'to': to,
+      'staffId': staffId,
       'sharedByResident': sharedByResident,
       'likes': likes.map((Like like) => like.toMap()).toList(),
       'medias': medias?.map((ChatMedia media) => media.toJson()).toList(),
